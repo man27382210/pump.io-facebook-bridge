@@ -4,13 +4,12 @@ window.fbAsyncInit = function () {
     });
 
     FB.init({
-        appId: 'XXXXXXXXXXX', // App ID
+        appId: '305436449601720', // App ID
         channelUrl: '//localhost/channel.html', // Channel File
         status: true, // check login status
         cookie: true, // enable cookies to allow the server to access the session
         xfbml: true  // parse XFBML
     });
-
 };
 
 // Load the SDK Asynchronously
@@ -28,7 +27,6 @@ window.fbAsyncInit = function () {
 
 var facebookconnect = {
     getStatusFB: function(){
-        console.log('.....');
         FB.getLoginStatus(function (response) {
             $(document).trigger('fbStatusChange', response);
         });
@@ -45,21 +43,22 @@ var facebookconnect = {
                 }
             });
         }, {
-            scope: 'email, user_likes, offline_access, publish_stream'
+            scope: 'email, user_likes, offline_access, publish_stream, read_stream'
         });
     },
 
     postFB: function (act) {
-        var str = act.attributes.object.content;
+        var link = "\n see the pump -> " + act.attributes.object.url;
+        var str = act.attributes.object.content + link;
         var regex = /<br\s*[\/]?>/gi;
         str = str.replace(regex, "\n");
         var body = str;
         FB.api('/me/feed', 'post', {
-            message: body,
-            actions: [{
-                'name': 'go to see pump.io',
-                'link': act.attributes.object.url
-            }]
+            message: body
+            // actions: [{
+            //     'name': 'go to see pump.io',
+            //     'link': act.attributes.object.url
+            // }]
         }, function(response) {
             if (!response || response.error) {
                 console.log(response.error);
@@ -67,5 +66,38 @@ var facebookconnect = {
             } else {
             }
         });
-    }
+    },
+    getPlace: function (latlon, callback) {
+        var url = '/search?type=place&center='+latlon+'&distance=1000'
+        FB.api(url, function(response) {
+            callback(response);
+        });
+    },
+    getPlaceLink: function (id, callback) {
+        var url = '/'+id;
+        FB.api(url, function(response) {
+            callback(response);
+        });
+    },
+    postPlaceFB: function (act, id, text) {
+        var link = "\n see the pump -> " + act.attributes.object.url;
+        var str = text + link;
+        var regex = /<br\s*[\/]?>/gi;
+        str = str.replace(regex, "\n");
+        FB.api('/me/feed', 'post', {
+            message: str,
+            place: id//,
+            // actions: [{
+            //     name: 'go to see pump.io',
+            //     link: act.attributes.object.url
+            // }]
+        }, function(response) {
+            if (!response || response.error) {
+                console.log(response.error);
+                console.log('Error occured');
+            } else {
+                console.log(response);
+            }
+        });
+    },
 };
