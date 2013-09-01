@@ -4,7 +4,7 @@ window.fbAsyncInit = function () {
     });
 
     FB.init({
-        appId: '305436449601720', // App ID
+        appId: 'XXXXX', // App ID
         channelUrl: '//localhost/channel.html', // Channel File
         status: true, // check login status
         cookie: true, // enable cookies to allow the server to access the session
@@ -26,7 +26,7 @@ window.fbAsyncInit = function () {
 }(document));
 
 var facebookconnect = {
-    getStatusFB: function(){
+    getStatusFB: function() {
         FB.getLoginStatus(function (response) {
             $(document).trigger('fbStatusChange', response);
         });
@@ -55,26 +55,20 @@ var facebookconnect = {
         var body = str;
         FB.api('/me/feed', 'post', {
             message: body
-            // actions: [{
-            //     'name': 'go to see pump.io',
-            //     'link': act.attributes.object.url
-            // }]
         }, function(response) {
             if (!response || response.error) {
-                console.log(response.error);
                 console.log('Error occured');
-            } else {
             }
         });
     },
     getPlace: function (latlon, callback) {
-        var url = '/search?type=place&center='+latlon+'&distance=1000'
+        var url = '/search?type=place&center=' + latlon + '&distance=1000';
         FB.api(url, function(response) {
             callback(response);
         });
     },
     getPlaceLink: function (id, callback) {
-        var url = '/'+id;
+        var url = '/' + id;
         FB.api(url, function(response) {
             callback(response);
         });
@@ -86,18 +80,13 @@ var facebookconnect = {
         str = str.replace(regex, "\n");
         FB.api('/me/feed', 'post', {
             message: str,
-            place: id//,
-            // actions: [{
-            //     name: 'go to see pump.io',
-            //     link: act.attributes.object.url
-            // }]
+            place: id
         }, function(response) {
             if (!response || response.error) {
-                console.log(response.error);
                 console.log('Error occured');
             } else {
                 console.log(response);
             }
         });
-    },
+    }
 };
