@@ -8,4 +8,4 @@ Version 0.0.1
 
 * A simple example is on the <https://github.com/man27382210/pump.io>, which tell you about how to add in to your pump.io code.
 
-* You can see the live demo on <http://>, which you have to register a new user and connect to your facebook.
+* You can see the live demo on <http://pumpio.zapto.org>, which you have to register a new user and connect to your facebook.
